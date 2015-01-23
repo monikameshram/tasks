@@ -1,0 +1,5 @@
+; $Id$
+name = products
+description = Module to add content type and fields
+core = 7.x
+

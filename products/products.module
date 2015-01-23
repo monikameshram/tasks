@@ -1,0 +1,22 @@
+<?php
+/**
+ * Implements hook_node_info()
+ */
+function products_node_info() {
+    return array(
+        'product' => array(
+            'name' => t('Product'),
+            'base' => 'product',
+            'description' => t('Add new product.'),
+            'has_title' => TRUE,
+            'title_label' => t('Product title')
+         )
+    );
+}
+
+/**
+ * Implement hook_form()
+ */
+function product_form($node, $form_state) {
+    return node_content_form($node, $form_state);
+}

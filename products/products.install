@@ -40,7 +40,7 @@ function _products_installed_fields() {
     $t = get_t();
     return array(
         'products_price' => array(
-            'field_name' => 'products_price',
+            'field_name' => 'price',
             'label' => $t('Price of the product'),
             'type' => 'text'
         ),
@@ -50,8 +50,8 @@ function _products_installed_fields() {
 function _products_installed_instances() {
     $t = get_t();
     return array(
-        'products_price' => array(
-            'field_name' => 'products_price',
+        'price' => array(
+            'field_name' => 'price',
             'type' => 'text',
             'label' => $t('Price'),
             'widget' => array(

@@ -40,9 +40,12 @@ function _products_installed_fields() {
     $t = get_t();
     return array(
         'products_price' => array(
-            'field_name' => 'price',
+            'field_name' => 'products_price',
             'label' => $t('Price of the product'),
-            'type' => 'text'
+						'type' => 'number_decimal',
+						'settings' => array(
+						'max_length' => 64, 
+					)
         ),
     );
 }
@@ -50,8 +53,8 @@ function _products_installed_fields() {
 function _products_installed_instances() {
     $t = get_t();
     return array(
-        'price' => array(
-            'field_name' => 'price',
+        'products_price' => array(
+            'field_name' => 'products_price',
             'type' => 'text',
             'label' => $t('Price'),
             'widget' => array(
@@ -78,3 +81,5 @@ function add_custom_fields() {
         field_create_instance($fieldinstance);
     }
 }
+
+

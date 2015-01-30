@@ -1,4 +1,81 @@
 <?php
+
+
+/*************************************************************************************/
+
+/**
+ * Implements hook_menu()
+ */
+
+function products_menu() {
+  $items = array();
+  $items['products/table'] = array(
+    'title' => 'Products Table',
+    'page callback' => 'products_list',
+		'access arguments' => array('access content'),
+    'description' => 'List of the products',
+    );
+  return $items;
+}
+
+function products_list() {
+
+	$header = array(
+		array(
+		'data' => t('Nid'),
+		'field' => 'nid'
+		),
+		array(
+		'data' => t('Title'),
+		'field' => 'title',
+		),
+		array(
+		'data' => t('Price'),
+		),
+		array(
+		'data' => t('Status'),
+		'field' => 'status'
+		),
+		array(
+		'data' => t('Created'),
+		'field' => 'created'
+		),
+		array(
+		'data' => t('Updated'),
+		'field' => 'changed'
+		),
+);
+
+ $nids = db_select('node', 'n')
+				->extend('PagerDefault')
+				->extend('TableSort')
+				->fields('n', array('nid'))
+				->limit(10)				
+				->orderByHeader($header)
+				->condition('n.type', 'product')
+				->execute()
+				->fetchCol(); 
+
+// Now return the node objects.
+$nodes = node_load_multiple($nids);
+//dpm($nodes);
+
+$rows = array();
+foreach ($nodes as $row) {
+$data[] = array(
+$row->nid,
+$row->title,
+$row->products_price[LANGUAGE_NONE][0]['value'],
+$row->status,
+'created'=>format_date($row->created, 'custom','d-m-Y'),
+'changed'=>format_date($row->changed, 'custom','d-m-Y'),
+);
+}
+	$output = theme('table',array('header' => $header,'rows' => $data));
+	$output .= theme('pager');
+	return $output;
+}
+
 /**
  * Implements hook_node_info()
  */

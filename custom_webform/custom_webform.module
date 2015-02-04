@@ -1,0 +1,186 @@
+<?php
+
+// $Id$
+
+/**
+ * Implements hook_menu().
+ */
+function custom_webform_menu()
+{
+    $items                      = array();
+    $items['user_registration'] = array(
+        'title' => 'My form',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array(
+            'custom_webform_form'
+        ),
+        'access arguments' => array(
+            'access content'
+        ),
+        'description' => 'Customer Details',
+        'type' => MENU_CALLBACK
+    );
+    return $items;
+}
+
+
+/**
+ * Implements hook_form().
+ */
+
+function custom_webform_form($form_state)
+{
+    
+    $form['firstname'] = array(
+        '#type' => 'textfield',
+        '#title' => t('First name'),
+        '#size' => 22,
+        '#maxlength' => 20,
+        '#required' => TRUE // Added
+    );
+    $form['lastname']  = array(
+        '#type' => 'textfield',
+        '#title' => t('Last name'),
+        '#size' => 22,
+        '#maxlength' => 20,
+        '#required' => TRUE // Added
+    );
+    
+    $form['mobile'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Mobile Number'),
+        '#size' => 22,
+        '#maxlength' => 20,
+        '#required' => TRUE // Added
+    );
+    
+    $form['address'] = array(
+        '#type' => 'textarea',
+        '#title' => t('Address'),
+        '#required' => TRUE // Added
+    );
+    
+    $form['age'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Age'),
+        '#size' => 22,
+        '#maxlength' => 20,
+        '#required' => TRUE // Added
+    );
+    
+    $form['country'] = array(
+        '#type' => 'select',
+        '#title' => t('Country'),
+        //'#default_value' => variable_get('Country','miss'),
+        '#options' => array(
+            'India' => t('India'),
+            'United States' => t('United States'),
+            'Japan' => t('Japan'),
+            'Brazil' => t('Brazil'),
+            'Italy' => t('Italy')
+        ),
+        '#required' => TRUE // Added
+    );
+    
+    $form['terms'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Agree to terms and conditions.'),
+        '#required' => TRUE
+        
+    );
+    
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Submit'
+    );
+    return $form;
+}
+
+/* Form validation */
+/**
+ * Implements hook_form_validate().
+ */
+
+function custom_webform_form_validate($form, &$form_state)
+{
+    
+    $firstname = $form_state['values']['firstname'];
+    if (!preg_match("/^([a-zA-Z]+[\'-]?[a-zA-Z]+[ ]?)+$/", $firstname)) {
+        //handles validation issues for names that have apostrophes, hypens and spaces.
+        form_set_error('firstname', t('First name should not contain any number.'));
+    }
+    
+    $lastname = $form_state['values']['lastname'];
+    if (!preg_match("/^([a-zA-Z]+[\'-]?[a-zA-Z]+[ ]?)+$/", $lastname)) {
+        //handles validation issues for names that have apostrophes, hypens and spaces.
+        form_set_error('firstname', t('Last name should not contain any number.'));
+    }
+    
+    $mobile = $form_state['values']['mobile'];
+    if (!preg_match("/^\d{10}$/", $mobile)) {
+        //if (!is_numeric($contact_det) ) {
+        form_set_error('mobile', t('You must enter a valid phone number'));
+    }
+    
+    $age = $form_state['values']['age'];
+    if (!preg_match("/^\d{2}$/", $age)) {
+        //if (!is_numeric($contact_det) ) {
+        form_set_error('age', t('You must enter valid age.'));
+    }
+    
+}
+
+/**
+ * Implements hook_form_submit().
+ */
+
+function custom_webform_form_submit($form, &$form_state)
+{
+    store_customer_data($form_state['values']['firstname'], $form_state['values']['lastname'], $form_state['values']['mobile'], $form_state['values']['address'], $form_state['values']['age'], $form_state['values']['country'], $form_state['values']['terms']);
+    
+    drupal_set_message(t('The form has been submitted.'));
+    
+}
+
+function store_customer_data($firstname, $lastname, $mobile, $address, $age, $country, $terms)
+{
+    
+    db_insert('customer_details')->fields(array(
+        'firstname' => $firstname,
+        'lastname' => $lastname,
+        'mobile' => $mobile,
+        'address' => $address,
+        'age' => $age,
+        'country' => $country,
+        'terms' => $terms
+    ))->execute();
+    
+    return "Contact details are added. Thank you!";
+}
+
+/********************************************************************************************************************/
+/**
+ * Implements hook_block_info().
+ */
+function custom_webform_block_info()
+{
+    $blocks                     = array();
+    $blocks['CUSTOMER_DETAILS'] = array(
+        'info' => t('Customer details')
+    );
+    return $blocks;
+}
+/**
+ * Implements hook_block_view().
+ */
+function custom_webform_block_view($delta = '')
+{
+    $block = array();
+    switch ($delta) {
+        case 'CUSTOMER_DETAILS':
+            $block['subject'] = '';
+            $block['content'] = drupal_get_form('custom_webform_form');
+            break;
+    }
+    return $block;
+}

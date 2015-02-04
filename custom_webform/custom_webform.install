@@ -2,74 +2,69 @@
 /**
  * Implements hook_schema().
  */
-
-function custom_webform_schema()
-{
-    $schema['customer_details'] = array(
-        'description' => t('Stores customer details.'),
-        'fields' => array(
-            'firstname' => array(
-                'type' => 'varchar',
-                'length' => '32',
-                'not null' => TRUE,
-                'description' => 'First name.'
-            ),
-            'lastname' => array(
-                'type' => 'varchar',
-                'length' => '32',
-                'not null' => TRUE,
-                'description' => 'Last name.'
-            ),
-            'mobile' => array(
-                'type' => 'varchar',
-                'length' => '32',
-                'not null' => TRUE,
-                'description' => 'mobile'
-            ),
-            'address' => array(
-                'type' => 'varchar',
-                'length' => '32',
-                'not null' => TRUE,
-                'description' => 'address'
-            ),
-            'age' => array(
-                'type' => 'varchar',
-                'length' => '32',
-                'not null' => TRUE,
-                'description' => 'Age'
-            ),
-            'country' => array(
-                'type' => 'varchar',
-                'length' => '32',
-                'not null' => TRUE,
-                'description' => 'country'
-            ),
-            'terms' => array(
-                'type' => 'varchar',
-                'length' => '32',
-                'not null' => TRUE,
-                'description' => 'terms'
-            )
-        )
-    );
-    return $schema;
-}
-
+function custom_webform_schema(){
+  $schema['customer_details'] = array(
+    'description' => t('Stores customer details.') ,
+    'fields' => array(
+      'firstname' => array(
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+        'description' => 'First name.'
+      ) ,
+      'lastname' => array(
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+        'description' => 'Last name.'
+      ) ,
+      'mobile' => array(
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+        'description' => 'mobile'
+      ) ,
+      'address' => array(
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+        'description' => 'address'
+      ) ,
+      'age' => array(
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+        'description' => 'Age'
+      ) ,
+      'country' => array(
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+        'description' => 'country'
+      ) ,
+      'terms' => array(
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+        'description' => 'terms'
+      )
+    )
+  );
+  return $schema;
+  }
+	
 /**
  * Implements hook_install().
  */
-function custom_webform_install()
-{
-    // Create tables.
-    drupal_install_schema('custom_webform');
-}
-
-
+function custom_webform_install(){
+  // Create tables.
+  drupal_install_schema('custom_webform');
+  }
+	
 /**
  * Implements hook_uninstall().
  */
-function custom_webform_uninstall()
-{
-    // Drop tables.
-    drupal_uninstall_schema('custom_webform');
-}
+function custom_webform_uninstall(){
+  // Drop tables.
+  drupal_uninstall_schema('custom_webform');
+  }

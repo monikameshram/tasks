@@ -7,7 +7,7 @@
  */
 function custom_webform_menu()
 {
-    $items                      = array();
+    $items = array();
     $items['user_registration'] = array(
         'title' => 'My form',
         'page callback' => 'drupal_get_form',
@@ -118,12 +118,11 @@ function custom_webform_form_validate($form, &$form_state)
     
     $mobile = $form_state['values']['mobile'];
     if (!preg_match("/^\d{10}$/", $mobile)) {
-        //if (!is_numeric($contact_det) ) {
-        form_set_error('mobile', t('You must enter a valid phone number'));
+         form_set_error('mobile', t('You must enter a valid 10 digit phone number'));
     }
     
     $age = $form_state['values']['age'];
-    if (!preg_match("/^\d{2}$/", $age)) {
+    if ((!preg_match("/^[0-9]{1,2}$/", $age))) {
         //if (!is_numeric($contact_det) ) {
         form_set_error('age', t('You must enter valid age.'));
     }
